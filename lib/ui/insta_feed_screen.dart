@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +23,7 @@ class _InstaFeedScreenState extends State<InstaFeedScreen> {
   IconData icon;
   Color color;
   List<User> usersList = List<User>();
-  Future<List<DocumentSnapshot>> _future;
+  //Future<List<DocumentSnapshot>> _future;
   bool _isLiked = false;
   List<String> followingUIDs = List<String>();
 
@@ -59,7 +58,12 @@ class _InstaFeedScreenState extends State<InstaFeedScreen> {
         });
       }
     }
-    _future = _repository.fetchFeed(currentUser);
+    // _future = _repository.fetchFeed(currentUser);
+  }
+
+  Future<List<DocumentSnapshot>> future() async {
+    FirebaseUser currentUser = await _repository.getCurrentUser();
+    return _repository.fetchFeed(currentUser);
   }
 
   @override
@@ -98,20 +102,31 @@ class _InstaFeedScreenState extends State<InstaFeedScreen> {
 
   Widget postImagesWidget() {
     return FutureBuilder(
-      future: _future,
+      future: future(),
       builder: ((context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
         if (snapshot.hasData) {
-          print("FFFF : ${followingUser.uid}");
+          //print("FFFF : ${followingUser.uid}");
           if (snapshot.connectionState == ConnectionState.done) {
-            return ListView.builder(
-                //shrinkWrap: true,
-                itemCount: snapshot.data.length,
-                itemBuilder: ((context, index) => listItem(
-                      list: snapshot.data,
-                      index: index,
-                      user: followingUser,
-                      currentUser: currentUser,
-                    )));
+            if (snapshot.data.length > 0) {
+              return ListView.builder(
+                  //shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: ((context, index) => listItem(
+                        list: snapshot.data,
+                        index: index,
+                        user: followingUser,
+                        currentUser: currentUser,
+                      )));
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                    child: Text(
+                  'No Users found. Please navigate to search and follow users in order to see their posts.',
+                  style: TextStyle(fontSize: 20.0),
+                )),
+              );
+            }
           } else {
             return Center(
               child: CircularProgressIndicator(),

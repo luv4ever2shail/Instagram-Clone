@@ -1,13 +1,9 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/resources/repository.dart';
 import 'package:instagram_clone/ui/insta_friend_profile_screen.dart';
-import 'package:instagram_clone/ui/insta_profile_screen.dart';
 import 'package:instagram_clone/ui/post_detail_screen.dart';
 
 class InstaSearchScreen extends StatefulWidget {
@@ -48,7 +44,6 @@ class _InstaSearchScreenState extends State<InstaSearchScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     print("INSIDE BUILD");
@@ -60,7 +55,8 @@ class _InstaSearchScreenState extends State<InstaSearchScreen> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              showSearch(context: context, delegate: DataSearch(userList: usersList));
+              showSearch(
+                  context: context, delegate: DataSearch(userList: usersList));
             },
           )
         ],
@@ -100,9 +96,8 @@ class _InstaSearchScreenState extends State<InstaSearchScreen> {
 }
 
 class DataSearch extends SearchDelegate<String> {
-
-   List<User> userList;
-   DataSearch({this.userList});
+  List<User> userList;
+  DataSearch({this.userList});
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -132,7 +127,7 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     return null;
-   // return Center(child: Container(width: 50.0, height: 50.0, color: Colors.red, child: Text(query),));
+    // return Center(child: Container(width: 50.0, height: 50.0, color: Colors.red, child: Text(query),));
   }
 
   @override
@@ -144,12 +139,12 @@ class DataSearch extends SearchDelegate<String> {
       itemCount: suggestionsList.length,
       itemBuilder: ((context, index) => ListTile(
             onTap: () {
-              
-           //   showResults(context);
-              Navigator.push(context, MaterialPageRoute(
-                builder: ((context) => InstaFriendProfileScreen(name: suggestionsList[index].displayName)) 
-              ));
-              
+              //   showResults(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => InstaFriendProfileScreen(
+                          name: suggestionsList[index].displayName))));
             },
             leading: CircleAvatar(
               backgroundImage: NetworkImage(suggestionsList[index].photoUrl),

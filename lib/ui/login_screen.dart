@@ -60,13 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
         print("VALUE : $value");
         print("INSIDE IF");
         _repository.addDataToDb(user).then((value) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
             return InstaHomeScreen();
           }));
         });
       } else {
         print("INSIDE ELSE");
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
           return InstaHomeScreen();
         }));
       }

@@ -33,14 +33,17 @@ class _InstaAddScreenState extends State<InstaAddScreen> {
             children: <Widget>[
               SimpleDialogOption(
                 child: Text('Choose from Gallery'),
-                onPressed: () {
-                  _pickImage('Gallery').then((selectedImage) {
+                onPressed: ()  {
+                   _pickImage('Gallery').then((selectedImage) {
                     setState(() {
                       imageFile = selectedImage;
                     });
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: ((context) => InstaUploadPhotoScreen(imageFile: imageFile,))
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => InstaUploadPhotoScreen(
+                                  imageFile: imageFile,
+                                ))));
                   });
                 },
               ),
@@ -51,10 +54,13 @@ class _InstaAddScreenState extends State<InstaAddScreen> {
                     setState(() {
                       imageFile = selectedImage;
                     });
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: ((context) => InstaUploadPhotoScreen(imageFile: imageFile,))
-                    ));
-                  }); 
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => InstaUploadPhotoScreen(
+                                  imageFile: imageFile,
+                                ))));
+                  });
                 },
               ),
               SimpleDialogOption(

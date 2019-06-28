@@ -1,19 +1,24 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
+  String currentUserUid;
+  String imgUrl;
+  String caption;
+  String location;
+  FieldValue time;
+  String postOwnerName;
+  String postOwnerPhotoUrl;
 
-   String currentUserUid;
-   String imgUrl;
-   String caption; 
-   String location; 
-   FieldValue time;
-   String postOwnerName; 
-   String postOwnerPhotoUrl;
+  Post(
+      {this.currentUserUid,
+      this.imgUrl,
+      this.caption,
+      this.location,
+      this.time,
+      this.postOwnerName,
+      this.postOwnerPhotoUrl});
 
-  Post({this.currentUserUid, this.imgUrl, this.caption, this.location, this.time, this.postOwnerName, this.postOwnerPhotoUrl});
-
-   Map toMap(Post post) {
+  Map toMap(Post post) {
     var data = Map<String, dynamic>();
     data['ownerUid'] = post.currentUserUid;
     data['imgUrl'] = post.imgUrl;
@@ -34,5 +39,4 @@ class Post {
     this.postOwnerName = mapData['postOwnerName'];
     this.postOwnerPhotoUrl = mapData['postOwnerPhotoUrl'];
   }
-
 }

@@ -49,7 +49,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           shape: BoxShape.circle,
                           image: new DecorationImage(
                               fit: BoxFit.fill,
-                              image: new NetworkImage(widget.documentSnapshot.data['postOwnerPhotoUrl'])),
+                              image: new NetworkImage(widget
+                                  .documentSnapshot.data['postOwnerPhotoUrl'])),
                         ),
                       ),
                       new SizedBox(
@@ -88,7 +89,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               height: 250.0,
               fit: BoxFit.cover,
             ),
-           
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -121,8 +121,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               //saveLikeValue(_isLiked);
                               postUnlike(widget.documentSnapshot.reference);
                             }
-
-                           
                           }),
                       new SizedBox(
                         width: 16.0,
@@ -152,11 +150,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 ],
               ),
             ),
-
-
             FutureBuilder(
-              future: _repository
-                  .fetchPostLikes(widget.documentSnapshot.reference),
+              future:
+                  _repository.fetchPostLikes(widget.documentSnapshot.reference),
               builder: ((context,
                   AsyncSnapshot<List<DocumentSnapshot>> likesSnapshot) {
                 if (likesSnapshot.hasData) {
@@ -188,7 +184,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 }
               }),
             ),
-
             Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -198,7 +193,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         children: <Widget>[
                           Wrap(
                             children: <Widget>[
-                              Text(widget.documentSnapshot.data['postOwnerName'],
+                              Text(
+                                  widget.documentSnapshot.data['postOwnerName'],
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                               Padding(
@@ -215,7 +211,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         ],
                       )
                     : commentWidget(widget.documentSnapshot.reference)),
-
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

@@ -1,15 +1,14 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:instagram_clone/models/comment.dart';
 import 'package:instagram_clone/models/like.dart';
 import 'package:instagram_clone/models/message.dart';
 import 'package:instagram_clone/models/post.dart';
 import 'package:instagram_clone/models/user.dart';
+import 'package:instagram_clone/models/comment.dart';
 
 class FirebaseProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -70,12 +69,12 @@ class FirebaseProvider {
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
     currentUser = await _auth.currentUser();
-    print("EMAIL ID : ${currentUser.email}");
+    //print("EMAIL ID : ${currentUser.email}");
     return currentUser;
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.disconnect();
+    //await _googleSignIn.disconnect();
     await _googleSignIn.signOut();
     return await _auth.signOut();
   }
@@ -97,6 +96,7 @@ class FirebaseProvider {
   Future<String> uploadImageToStorage(File imageFile) async {
     _storageReference = FirebaseStorage.instance
         .ref()
+        .child('post')
         .child('${DateTime.now().millisecondsSinceEpoch}');
     StorageUploadTask storageUploadTask = _storageReference.putFile(imageFile);
     var url = await (await storageUploadTask.onComplete).ref.getDownloadURL();
@@ -108,7 +108,7 @@ class FirebaseProvider {
     CollectionReference _collectionRef = _firestore
         .collection("users")
         .document(currentUser.uid)
-        .collection("posts");
+        .collection("post");
 
     post = Post(
         currentUserUid: currentUser.uid,
@@ -132,7 +132,7 @@ class FirebaseProvider {
     QuerySnapshot querySnapshot = await _firestore
         .collection("users")
         .document(userId)
-        .collection("posts")
+        .collection("post")
         .getDocuments();
     return querySnapshot.documents;
   }
@@ -212,7 +212,7 @@ class FirebaseProvider {
         uid = uidList[i].documentID;
       }
     }
-    print("UID DOC ID: ${uid}");
+    print("UID DOC ID: $uid");
     return uid;
   }
 
@@ -365,7 +365,7 @@ class FirebaseProvider {
     map['timestamp'] = _message.timestamp;
     map['photoUrl'] = _message.photoUrl;
 
-    print("Map : ${map}");
+    print("Map : $map");
     _firestore
         .collection("messages")
         .document(_message.senderUid)
@@ -405,7 +405,7 @@ class FirebaseProvider {
 
   Future<List<DocumentSnapshot>> fetchFeed(FirebaseUser user) async {
     List<String> followingUIDs = List<String>();
-    List<DocumentSnapshot> list =List<DocumentSnapshot>();
+    List<DocumentSnapshot> list = List<DocumentSnapshot>();
 
     QuerySnapshot querySnapshot = await _firestore
         .collection("users")
@@ -422,28 +422,28 @@ class FirebaseProvider {
     for (var i = 0; i < followingUIDs.length; i++) {
       print("SDDSSD : ${followingUIDs[i]}");
 
-    //retrievePostByUID(followingUIDs[i]);
-     // fetchUserDetailsById(followingUIDs[i]);
+      //retrievePostByUID(followingUIDs[i]);
+      // fetchUserDetailsById(followingUIDs[i]);
 
       QuerySnapshot postSnapshot = await _firestore
           .collection("users")
           .document(followingUIDs[i])
-          .collection("posts")
+          .collection("post")
           .getDocuments();
-         // postSnapshot.documents;
+      // postSnapshot.documents;
       for (var i = 0; i < postSnapshot.documents.length; i++) {
         print("dad : ${postSnapshot.documents[i].documentID}");
         list.add(postSnapshot.documents[i]);
         print("ads : ${list.length}");
-      } 
+      }
     }
-   
+
     return list;
   }
 
-   Future<List<String>> fetchFollowingUids(FirebaseUser user) async{
+  Future<List<String>> fetchFollowingUids(FirebaseUser user) async {
     List<String> followingUIDs = List<String>();
-  
+
     QuerySnapshot querySnapshot = await _firestore
         .collection("users")
         .document(user.uid)

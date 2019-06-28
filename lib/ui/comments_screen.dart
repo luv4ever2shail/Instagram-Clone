@@ -107,9 +107,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
     widget.documentReference
         .collection("comments")
         .document()
-        .setData(_comment.toMap(_comment)).whenComplete(() {
-          _commentController.text = "";
-        });
+        .setData(_comment.toMap(_comment))
+        .whenComplete(() {
+      _commentController.text = "";
+    });
   }
 
   Widget commentsListWidget() {
@@ -136,18 +137,17 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   Widget commentItem(DocumentSnapshot snapshot) {
-  //   var time;
-  //   List<String> dateAndTime;
-  //   print('${snapshot.data['timestamp'].toString()}');
-  //   if (snapshot.data['timestamp'].toString() != null) {
-  //       Timestamp timestamp =snapshot.data['timestamp'];
-  //  // print('${timestamp.seconds}');
-  //  // print('${timestamp.toDate()}');
-  //    time =timestamp.toDate().toString();
-  //    dateAndTime = time.split(" ");
-  //   }
-  
-    
+    //   var time;
+    //   List<String> dateAndTime;
+    //   print('${snapshot.data['timestamp'].toString()}');
+    //   if (snapshot.data['timestamp'].toString() != null) {
+    //       Timestamp timestamp =snapshot.data['timestamp'];
+    //  // print('${timestamp.seconds}');
+    //  // print('${timestamp.toDate()}');
+    //    time =timestamp.toDate().toString();
+    //    dateAndTime = time.split(" ");
+    //   }
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Row(
@@ -160,7 +160,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
             ),
           ),
           SizedBox(
-            width: 15.0,
+            width: .0,
           ),
           Row(
             children: <Widget>[

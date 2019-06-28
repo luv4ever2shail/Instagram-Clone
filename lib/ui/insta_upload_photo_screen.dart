@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/resources/repository.dart';
 import 'package:instagram_clone/ui/insta_home_screen.dart';
 import 'package:location/location.dart';
@@ -11,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:math';
 
 class InstaUploadPhotoScreen extends StatefulWidget {
-   File imageFile;
+  File imageFile;
   InstaUploadPhotoScreen({this.imageFile});
 
   @override
@@ -22,10 +23,9 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
   var _locationController;
   var _captionController;
   final _repository = Repository();
-
+  User user;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _locationController = TextEditingController();
     _captionController = TextEditingController();
@@ -37,9 +37,6 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
     _locationController?.dispose();
     _captionController?.dispose();
   }
-
-  
-
 
   bool _visibility = true;
 
@@ -62,32 +59,33 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
             child: GestureDetector(
               child: Text('Share',
                   style: TextStyle(color: Colors.blue, fontSize: 16.0)),
-              onTap: () {
+              onTap: () async {
                 // To show the CircularProgressIndicator
                 _changeVisibility(false);
-
-                _repository.getCurrentUser().then((currentUser) {
+                await _repository.getCurrentUser().then((currentUser) async {
                   if (currentUser != null) {
                     compressImage();
-                    _repository.retrieveUserDetails(currentUser).then((user) {
+                    await _repository
+                        .retrieveUserDetails(currentUser)
+                        .then((user) {
                       _repository
-                        .uploadImageToStorage(widget.imageFile)
-                        .then((url) {
-                      _repository
-                          .addPostToDb(user, url,
-                              _captionController.text, _locationController.text)
-                          .then((value) {
-                        print("Post added to db");
-                        Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: ((context) => InstaHomeScreen())
-                        ));
-                      }).catchError((e) =>
-                              print("Error adding current post to db : $e"));
-                    }).catchError((e) {
-                      print("Error uploading image to storage : $e");
+                          .uploadImageToStorage(widget.imageFile)
+                          .then((url) {
+                        _repository
+                            .addPostToDb(user, url, _captionController.text,
+                                _locationController.text)
+                            .then((value) {
+                          print("Post added to db");
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => InstaHomeScreen())));
+                        }).catchError((e) =>
+                                print("Error adding current post to db : $e"));
+                      }).catchError((e) {
+                        print("Error uploading image to storage : $e");
+                      });
                     });
-                    });
-                    
                   } else {
                     print("Current User is null");
                   }
@@ -122,11 +120,6 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
                     decoration: InputDecoration(
                       hintText: 'Write a caption...',
                     ),
-                    onChanged: ((value) {
-                      setState(() {
-                        _captionController.text = value;
-                      });
-                    }),
                   ),
                 ),
               )
@@ -173,14 +166,14 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
                             child: Chip(
                               label: Text(snapshot.data.first.subAdminArea +
                                   ", " +
-                                  snapshot.data.first.subLocality),
+                                  (snapshot.data.first.subLocality ?? "")),
                             ),
                             onTap: () {
                               setState(() {
                                 _locationController.text =
                                     snapshot.data.first.subAdminArea +
                                         ", " +
-                                        snapshot.data.first.subLocality;
+                                        (snapshot.data.first.subLocality ?? "");
                               });
                             },
                           ),
@@ -195,7 +188,10 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 50.0),
-            child: Offstage(child: CircularProgressIndicator(), offstage: _visibility,),
+            child: Offstage(
+              child: CircularProgressIndicator(),
+              offstage: _visibility,
+            ),
           )
         ],
       ),
@@ -209,7 +205,7 @@ class _InstaUploadPhotoScreenState extends State<InstaUploadPhotoScreen> {
     int rand = Random().nextInt(10000);
 
     Im.Image image = Im.decodeImage(widget.imageFile.readAsBytesSync());
-    Im.copyResize(image, 500);
+    Im.copyResize(image, width: 500);
 
     var newim2 = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(image, quality: 85));

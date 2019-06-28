@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:instagram_clone/main.dart';
 import 'package:instagram_clone/models/like.dart';
 import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/resources/repository.dart';
@@ -39,7 +37,7 @@ class _InstaFriendProfileScreenState extends State<InstaFriendProfileScreen> {
   int followingCount = 0;
 
   fetchUidBySearchedName(String name) async {
-    print("NAME : ${name}");
+    print("NAME : $name");
     String uid = await _repository.fetchUidBySearchedName(name);
     setState(() {
       followingUserId = uid;
@@ -66,7 +64,7 @@ class _InstaFriendProfileScreenState extends State<InstaFriendProfileScreen> {
         });
       });
       _repository.checkIsFollowing(widget.name, user.uid).then((value) {
-        print("VALUE : ${value}");
+        print("VALUE : $value");
         setState(() {
           isFollowing = value;
         });
@@ -198,7 +196,9 @@ class _InstaFriendProfileScreenState extends State<InstaFriendProfileScreen> {
                                           snapshot.data.length.toString(),
                                           'posts');
                                     } else {
-                                      return Center(child: CircularProgressIndicator(),);
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
                                     }
                                   }),
                                 ),
@@ -221,7 +221,9 @@ class _InstaFriendProfileScreenState extends State<InstaFriendProfileScreen> {
                                             'followers'),
                                       );
                                     } else {
-                                      return Center(child: CircularProgressIndicator(),);
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
                                     }
                                   }),
                                 ),
@@ -244,7 +246,9 @@ class _InstaFriendProfileScreenState extends State<InstaFriendProfileScreen> {
                                             'following'),
                                       );
                                     } else {
-                                      return Center(child: CircularProgressIndicator(),);
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
                                     }
                                   }),
                                 ),
@@ -427,9 +431,9 @@ class _InstaFriendProfileScreenState extends State<InstaFriendProfileScreen> {
 }
 
 class ListItem extends StatefulWidget {
-  List<DocumentSnapshot> list;
-  User user, currentuser;
-  int index;
+  final List<DocumentSnapshot> list;
+  final User user, currentuser;
+  final int index;
 
   ListItem({this.list, this.user, this.index, this.currentuser});
 
@@ -558,13 +562,13 @@ class _ListItemState extends State<ListItem> {
                           setState(() {
                             _isLiked = true;
                           });
-                          
+
                           postLike(widget.list[widget.index].reference);
                         } else {
                           setState(() {
                             _isLiked = false;
                           });
-                         
+
                           postUnlike(widget.list[widget.index].reference);
                         }
                       }),

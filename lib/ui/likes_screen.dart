@@ -37,12 +37,21 @@ class _LikesScreenState extends State<LikesScreen> {
                   child: ListTile(
                     title: GestureDetector(
                       onTap: () {
-                        snapshot.data[index].data['ownerName'] == widget.user.displayName ? 
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: ((context) => InstaProfileScreen())
-                        )) : Navigator.push(context, MaterialPageRoute(
-                          builder: ((context) => InstaFriendProfileScreen(name: snapshot.data[index].data['ownerName'],))
-                        ));
+                        snapshot.data[index].data['ownerName'] ==
+                                widget.user.displayName
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        InstaProfileScreen())))
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        InstaFriendProfileScreen(
+                                          name: snapshot
+                                              .data[index].data['ownerName'],
+                                        ))));
                       },
                       child: Text(
                         snapshot.data[index].data['ownerName'],
@@ -54,12 +63,21 @@ class _LikesScreenState extends State<LikesScreen> {
                     ),
                     leading: GestureDetector(
                       onTap: () {
-                       snapshot.data[index].data['ownerName'] == widget.user.displayName ? 
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: ((context) => InstaProfileScreen())
-                        )) : Navigator.push(context, MaterialPageRoute(
-                          builder: ((context) => InstaFriendProfileScreen(name: snapshot.data[index].data['ownerName'],))
-                        ));
+                        snapshot.data[index].data['ownerName'] ==
+                                widget.user.displayName
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        InstaProfileScreen())))
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        InstaFriendProfileScreen(
+                                          name: snapshot
+                                              .data[index].data['ownerName'],
+                                        ))));
                       },
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(

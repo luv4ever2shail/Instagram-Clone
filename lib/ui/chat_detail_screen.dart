@@ -85,9 +85,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 )
               : Column(
                   children: <Widget>[
-                   
-                    ChatMessagesListWidget(),
-                    
+                    chatMessagesListWidget(),
                     chatInputWidget(),
                     SizedBox(
                       height: 20.0,
@@ -182,7 +180,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     int rand = Random().nextInt(10000);
 
     Im.Image image = Im.decodeImage(imageFile.readAsBytesSync());
-    Im.copyResize(image, 500);
+    Im.copyResize(image, width: 500);
 
     var newim2 = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(image, quality: 85));
@@ -204,7 +202,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         timestamp: FieldValue.serverTimestamp(),
         type: 'text');
     print(
-        "receiverUid: ${widget.receiverUid} , senderUid : ${_senderuid} , message: ${text}");
+        "receiverUid: ${widget.receiverUid} , senderUid : $_senderuid , message: $text");
     print(
         "timestamp: ${DateTime.now().millisecond}, type: ${text != null ? 'text' : 'image'}");
     _repository.addMessageToDb(_message, widget.receiverUid).then((v) {
@@ -213,7 +211,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     });
   }
 
-  Widget ChatMessagesListWidget() {
+  Widget chatMessagesListWidget() {
     print("SENDERUID : $_senderuid");
     return Flexible(
       child: StreamBuilder(

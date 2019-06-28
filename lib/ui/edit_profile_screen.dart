@@ -80,9 +80,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       _phoneController.text)
                   .then((v) {
                 Navigator.pop(context);
-                // Navigator.push(context, MaterialPageRoute(
-                //   builder: ((context) => InstaHomeScreen())
-                // ));
+                //   Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: ((context) => InstaProfileScreen())));
               });
             },
           )
@@ -132,11 +133,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hintText: 'Name',
                     labelText: 'Name',
                   ),
-                  onChanged: ((value) {
-                    setState(() {
-                      _nameController.text = value;
-                    });
-                  }),
                 ),
               ),
               Padding(
@@ -147,11 +143,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   maxLines: 3,
                   decoration:
                       InputDecoration(hintText: 'Bio', labelText: 'Bio'),
-                  onChanged: ((value) {
-                    setState(() {
-                      _bioController.text = value;
-                    });
-                  }),
                 ),
               ),
               Divider(),
@@ -172,11 +163,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   controller: _emailController,
                   decoration: InputDecoration(
                       hintText: 'Email address', labelText: 'Email address'),
-                  onChanged: ((value) {
-                    setState(() {
-                      _emailController.text = value;
-                    });
-                  }),
                 ),
               ),
               Padding(
@@ -185,11 +171,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: TextField(
                   decoration: InputDecoration(
                       hintText: 'Phone Number', labelText: 'Phone Number'),
-                  onChanged: ((value) {
-                    setState(() {
-                      _phoneController.text = value;
-                    });
-                  }),
                 ),
               )
             ],
@@ -210,15 +191,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Text('Choose from Gallery'),
                 onPressed: () {
                   _pickImage('Gallery').then((selectedImage) {
-                    setState(() {
-                      imageFile = selectedImage;
-                    });
-                    compressImage();
-                    _repository.uploadImageToStorage(imageFile).then((url) {
-                      _repository.updatePhoto(url, currentUser.uid).then((v) {
-                        Navigator.pop(context);
+                    if (selectedImage != null) {
+                      setState(() {
+                        imageFile = selectedImage;
                       });
-                    });
+                      compressImage();
+                      _repository.uploadImageToStorage(imageFile).then((url) {
+                        _repository.updatePhoto(url, currentUser.uid).then((v) {
+                          Navigator.pop(context);
+                        });
+                      });
+                    }
                   });
                 },
               ),
@@ -226,15 +209,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Text('Take Photo'),
                 onPressed: () {
                   _pickImage('Camera').then((selectedImage) {
-                    setState(() {
-                      imageFile = selectedImage;
-                    });
-                    compressImage();
-                    _repository.uploadImageToStorage(imageFile).then((url) {
-                      _repository.updatePhoto(url, currentUser.uid).then((v) {
-                        Navigator.pop(context);
+                    if (selectedImage != null) {
+                      setState(() {
+                        imageFile = selectedImage;
                       });
-                    });
+                      imageFile != null ?? compressImage();
+                      _repository.uploadImageToStorage(imageFile).then((url) {
+                        _repository.updatePhoto(url, currentUser.uid).then((v) {
+                          Navigator.pop(context);
+                        });
+                      });
+                    }
                   });
                 },
               ),
@@ -256,7 +241,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     int rand = Random().nextInt(10000);
 
     Im.Image image = Im.decodeImage(imageFile.readAsBytesSync());
-    Im.copyResize(image, 500);
+    Im.copyResize(image, width: 500);
 
     var newim2 = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(image, quality: 85));

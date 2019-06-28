@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:instagram_clone/ui/comments_screen.dart';
 import 'package:instagram_clone/ui/edit_profile_screen.dart';
 import 'package:instagram_clone/ui/likes_screen.dart';
 import 'package:instagram_clone/ui/post_detail_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class InstaProfileScreen extends StatefulWidget {
@@ -92,7 +90,6 @@ class _InstaProfileScreenState extends State<InstaProfileScreen> {
                                   fit: BoxFit.cover),
                             )),
                       ),
-                      
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Column(
@@ -185,15 +182,17 @@ class _InstaProfileScreenState extends State<InstaProfileScreen> {
                                 ),
                               ),
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: ((context) => EditProfileScreen(
-                                    photoUrl: _user.photoUrl,
-                                    email: _user.email,
-                                    bio: _user.bio,
-                                    name: _user.displayName,
-                                    phone: _user.phone
-                                  ))
-                                ));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => EditProfileScreen(
+                                        photoUrl: _user.photoUrl,
+                                        email: _user.email,
+                                        bio: _user.bio,
+                                        name: _user.displayName,
+                                        phone: _user.phone)),
+                                  ),
+                                );
                               },
                             )
                           ],
@@ -365,9 +364,9 @@ class _InstaProfileScreenState extends State<InstaProfileScreen> {
 }
 
 class ListItem extends StatefulWidget {
-  List<DocumentSnapshot> list;
-  User user;
-  int index;
+  final List<DocumentSnapshot> list;
+  final User user;
+  final int index;
 
   ListItem({this.list, this.user, this.index});
 
